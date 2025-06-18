@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EarnX - Daily Income App</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --secondary: #3f37c9;
+            --success: #4cc9f0;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+        }
+        .card {
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .package-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+        .progress {
+            height: 10px;
+            border-radius: 5px;
+        }
+        .referral-code {
+            background: linear-gradient(45deg, #f3ec78, #af4261);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="py-5">
+    <div class="container mx-auto px-3">
+        <!-- Header -->
+        <header class="text-center mb-5">
+            <h1 class="display-4 font-weight-bold text-primary mb-3">EarnX</h1>
+            <p class="lead">Daily Income Platform</p>
+        </header>
+
+        <!-- User Dashboard -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5 class="card-title">Welcome, <span id="username">User</span>!</h5>
+                        <p class="text-muted mb-1">Joined: <span id="join-date">01/01/2023</span></p>
+                    </div>
+                    <div class="text-end">
+                        <div class="h4 mb-0 text-success">Rs. <span id="total-balance">0</span></div>
+                        <small class="text-muted">Total Balance</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Packages -->
+        <h4 class="mb-3">Investment Packages</h4>
+        <div class="row g-4 mb-4">
+            <!-- Free Package -->
+            <div class="col-md-4">
+                <div class="card h-100 border-primary position-relative">
+                    <div class="package-badge bg-primary text-white">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Free</h5>
+                        <h2 class="my-3">Rs. 200</h2>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i> Daily: Rs. 45</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Withdraw: Rs. 300</li>
+                            <li><i class="fas fa-times text-danger me-2"></i> No Referral Bonus</li>
+                        </ul>
+                        <button class="btn btn-primary w-100" onclick="selectPackage('free')">Select</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Silver Package -->
+            <div class="col-md-4">
+                <div class="card h-100 border-secondary position-relative">
+                    <div class="package-badge bg-secondary text-white">
+                        <i class="fas fa-medal"></i>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Silver</h5>
+                        <h2 class="my-3">Rs. 1,000</h2>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i> Daily: Rs. 100</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Withdraw: Rs. 500</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Level 1: 5%</li>
+                        </ul>
+                        <button class="btn btn-secondary w-100" onclick="selectPackage('silver')">Select</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gold Package -->
+            <div class="col-md-4">
+                <div class="card h-100 border-warning position-relative">
+                    <div class="package-badge bg-warning text-dark">
+                        <i class="fas fa-crown"></i>
+                    </div>
+                    <div class="card-body text-center">
+                        <h5 class="card-title">Gold</h5>
+                        <h2 class="my-3">Rs. 5,000</h2>
+                        <ul class="list-unstyled text-start mb-4">
+                            <li><i class="fas fa-check text-success me-2"></i> Daily: Rs. 250</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Withdraw: Rs. 1,000</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Level 1: 7%</li>
+                            <li><i class="fas fa-check text-success me-2"></i> Level 2: 3%</li>
+                        </ul>
+                        <button class="btn btn-warning w-100" onclick="selectPackage('gold')">Select</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Income Section -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title d-flex justify-content-between align-items-center">
+                    <span>Daily Income</span>
+                    <button class="btn btn-sm btn-success" onclick="claimIncome()">
+                        <i class="fas fa-coins me-1"></i> Claim Today's Income
+                    </button>
+                </h5>
+                <div class="progress mt-3 mb-2">
+                    <div id="income-progress" class="progress-bar bg-success" role="progressbar" style="width: 0%"></div>
+                </div>
+                <div class="d-flex justify-content-between">
+                    <small>Rs. <span id="current-income">0</span></small>
+                    <small>Rs. <span id="target-income">300</span></small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Referral System -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h5 class="card-title">Refer & Earn</h5>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" id="referral-code-input" value="EARNX123" readonly>
+                    <button class="btn btn-outline-secondary" onclick="copyReferralCode()">
+                        <i class="far fa-copy"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="alert alert-info p-2">
+                            <small class="d-block">Level 1 Referrals</small>
+                            <strong>5</strong> Users | Rs. <strong>250</strong>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="alert alert-secondary p-2">
+                            <small class="d-block">Level 2 Referrals</small>
+                            <strong>12</strong> Users | Rs. <strong>120</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- WhatsApp Channel -->
+        <div class="card shadow-sm">
+            <div class="card-body text-center">
+                <h5 class="card-title">Join Our Community</h5>
+                <a href="https://whatsapp.com/channel/0029Vb6Jg9hHQbS05d7suj2B" class="btn btn-success">
+                    <i class="fab fa-whatsapp me-2"></i> WhatsApp Channel
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap & Font Awesome -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- Main JavaScript -->
+    <script>
+        // User Data
+        let user = {
+            name: "User",
+            balance: 0,
+            package: null,
+            joinDate: new Date().toLocaleDateString(),
+            referrals: {
+                level1: 5,
+                level2: 12,
+                earnings: 370
+            }
+        };
+
+        // Packages Data
+        const packages = {
+            free: {
+                name: "Free",
+                price: 200,
+                daily: 45,
+                minWithdraw: 300,
+                color: "primary",
+                referral: false
+            },
+            silver: {
+                name: "Silver",
+                price: 1000,
+                daily: 100,
+                minWithdraw: 500,
+                color: "secondary",
+                referral: { level1: 5 }
+            },
+            gold: {
+                name: "Gold",
+                price: 5000,
+                daily: 250,
+                minWithdraw: 1000,
+                color: "warning",
+                referral: { level1: 7, level2: 3 }
+            }
+        };
+
+        // Initialize
+        function init() {
+            document.getElementById('username').textContent = user.name;
+            document.getElementById('join-date').textContent = user.joinDate;
+            updateBalance();
+        }
+
+        // Select Package
+        function selectPackage(pkg) {
+            user.package = packages[pkg];
+            alert(`You have selected ${user.package.name} package!`);
+            updateUI();
+        }
+
+        // Claim Daily Income
+        function claimIncome() {
+            if (!user.package) {
+                alert("Please select a package first!");
+                return;
+            }
+            
+            user.balance += user.package.daily;
+            updateBalance();
+            
+            // Update progress
+            const progress = Math.min((user.balance / user.package.minWithdraw) * 100, 100);
+            document.getElementById('income-progress').style.width = `${progress}%`;
+            
+            alert(`You earned Rs. ${user.package.daily} today!`);
+        }
+
+        // Update Balance
+        function updateBalance() {
+            document.getElementById('total-balance').textContent = user.balance;
+            document.getElementById('current-income').textContent = user.balance;
+            document.getElementById('target-income').textContent = 
+                user.package ? user.package.minWithdraw : packages.free.minWithdraw;
+        }
+
+        // Copy Referral Code
+        function copyReferralCode() {
+            const input = document.getElementById('referral-code-input');
+            input.select();
+            document.execCommand('copy');
+            alert('Referral code copied!');
+        }
+
+        // Update UI
+        function updateUI() {
+            if (user.package) {
+                document.getElementById('target-income').textContent = user.package.minWithdraw;
+            }
+        }
+
+        // Initialize on load
+        window.onload = init;
+    </script>
+</body>
+</html>
